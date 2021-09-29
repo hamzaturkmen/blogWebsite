@@ -50,7 +50,8 @@ app.get("/posts/:postId", function(req, res) {
     } else {
       res.render("post", {
         postTitle: post.title,
-        postBody: post.body
+        postBody: post.body,
+        postId: post._id
       });
     }
   });
@@ -85,13 +86,51 @@ app.post("/compose", function(req, res) {
   });
 })
 
+app.post("/editPublish", function(req, res) {
+  console.log(req.body);
+  // update post
+  Post.findByIdAndUpdate(req.body.editPostId, {
+    title: req.body.postTitle,
+    body: req.body.postBody
+  }, function(err, post) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  })
+});
 
-
-
-
-
-
-
+app.post("/edit", function(req, res) {
+  console.log(req.body.button);
+  // delete button
+  if (req.body.button === "delete") {
+    // delete
+    Post.findByIdAndDelete(req.body.deletePostId, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("deleted succesfully");
+        res.redirect("/");
+      }
+    })
+  } else {
+    Post.findOne({
+      _id: (req.body.button)
+    }, function(err, post) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(req.body.button);
+        res.render("edit", {
+          postTitle: post.title,
+          postBody: post.body,
+          editPostId: req.body.button
+        });
+      }
+    });
+  }
+});
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");

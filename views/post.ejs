@@ -1,8 +1,12 @@
 <%- include("partials/header"); -%>
 
 
+<form action="/edit" method="post" id="form1">
 <h1> <%= postTitle %> </h1>
 <p> <%= postBody %> </p>
-
+<input hidden type="text" name="deletePostId" value=<%= postId %>>
+<button type="submit" name="button" value=<%= postId %> class="btn btn-primary">Edit</button>
+<button type="submit" name="button" value="delete"><i class="fas fa-trash-alt"></i> Delete</button>
+</form>
 
 <%- include("partials/footer"); -%>
